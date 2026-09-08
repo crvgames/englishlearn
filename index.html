@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,6 @@
             height: 100vh;
         }
 
-        /* HUD Gösterge Paneli */
         #hud {
             position: absolute;
             top: 20px;
@@ -34,7 +33,6 @@
             pointer-events: none;
         }
 
-        /* Kontrol Bilgileri Ekranı */
         #controls-info {
             position: absolute;
             bottom: 20px;
@@ -70,7 +68,6 @@
         }
     </style>
 
-    <!-- Three.js ve GLTFLoader CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
@@ -98,73 +95,58 @@
     </div>
 
     <script>
-        // --- 1. SAHNE VE TEMEL KURULUM ---
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xa0d8ef); // Gökyüzü rengi
-        scene.fog = new THREE.FogExp2(0xa0d8ef, 0.0005);
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.FogExp2(0x87ceeb, 0.0002);
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 50000);
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         container.appendChild(renderer.domElement);
 
-        // --- 2. IŞIKLANDIRMA ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
 
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-        dirLight.position.set(500, 1000, 500);
+        dirLight.position.set(2000, 4000, 2000);
         dirLight.castShadow = true;
         scene.add(dirLight);
 
-        // --- 3. ÇEVRE (ÇİM ARAZİ VE BULUTLAR) ---
-        const gridHelper = new THREE.GridHelper(20000, 200, 0x004400, 0x228822);
+        // Zemin ve Izgara
+        const gridHelper = new THREE.GridHelper(50000, 200, 0x004400, 0x228822);
         gridHelper.position.y = 0;
         scene.add(gridHelper);
 
-        // Bulut Oluşturma
-        const clouds = new THREE.Group();
-        const cloudGeo = new THREE.DodecahedronGeometry(80, 1);
-        const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true, transparent: true, opacity: 0.8 });
-
-        for(let i = 0; i < 150; i++) {
-            const cloud = new THREE.Mesh(cloudGeo, cloudMat);
-            cloud.position.set(
-                (Math.random() - 0.5) * 15000,
-                300 + Math.random() * 2000,
-                (Math.random() - 0.5) * 15000
-            );
-            cloud.scale.set(1 + Math.random()*2, 0.8 + Math.random(), 1 + Math.random()*2);
-            clouds.add(cloud);
-        }
-        scene.add(clouds);
-
-        // --- 4. UÇAK FİZİK & KONTROL DEĞİŞKENLERİ ---
         let airplane = new THREE.Group();
         scene.add(airplane);
 
         let physics = {
             speed: 0,
-            maxSpeed: 300,
-            throttle: 0,
+            maxSpeed: 800,
+            throttle: 50, // Başlangıçta %50 gaz verelim ki doğrudan hareket etmeye başlasın
             pitch: 0,
             roll: 0,
             yaw: 0,
             altitude: 0
         };
 
-        const keys = { w: false, s: false, a: false, d: false, q: false, e: false, Shift: false, Control: false };
+        const keys = {};
 
-        // --- 5. MODELİN YÜKLENMESİ ---
+        window.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
+        window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+
         const loader = new THREE.GLTFLoader();
-        // Modelinizi "airplane.gltf" ismiyle kodla aynı dizine koymalısınız
         loader.load('airplane.gltf', (gltf) => {
             const model = gltf.scene;
-            
-            // Model ölçeklendirme ve yön düzeltmesi
-            model.scale.set(0.5, 0.5, 0.5); 
+
+            // MODEL BOYUTUNU BÜYÜTÜYORUZ (İhtiyaca göre 50 rakamını değiştirebilirsiniz)
+            model.scale.set(50, 50, 50);
+
+            // Modellerin yönü farklılık gösterebilir, 180 derece döndürerek öne bakmasını sağlıyoruz
+            model.rotation.y = Math.PI;
+
             model.traverse((child) => {
                 if (child.isMesh) {
                     child.castShadow = true;
@@ -173,62 +155,48 @@
             });
 
             airplane.add(model);
-            airplane.position.set(0, 100, 0); // Başlangıç yüksekliği
+            airplane.position.set(0, 500, 0); // Başlangıç yüksekliğini artırdık
             document.getElementById('loading').style.display = 'none';
         }, undefined, (error) => {
-            console.error('Model yüklenirken hata oluştu:', error);
-            document.getElementById('loading').innerText = 'Model dosyası (airplane.gltf) bulunamadı!';
+            console.error(error);
+            document.getElementById('loading').innerText = 'Model dosyası yüklenemedi!';
         });
 
-        // --- 6. KLAVYE KONTROLLERİ ---
-        window.addEventListener('keydown', (e) => { if(keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) keys[e.key] = true; });
-        window.addEventListener('keyup', (e) => { if(keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) keys[e.key] = false; });
-
-        // --- 7. FİZİK VE HAREKET MOTORU ---
         function updatePhysics() {
-            // Gaz Kontrolü
-            if (keys['Shift']) physics.throttle = Math.min(100, physics.throttle + 0.5);
-            if (keys['Control']) physics.throttle = Math.max(0, physics.throttle - 0.5);
+            // Gaz Kontrolü (Shift & Control)
+            if (keys['shift']) physics.throttle = Math.min(100, physics.throttle + 0.5);
+            if (keys['control']) physics.throttle = Math.max(0, physics.throttle - 0.5);
 
-            // Hedef Hız Hesabı
+            // Hızlanma Hesabı
             const targetSpeed = (physics.throttle / 100) * physics.maxSpeed;
-            physics.speed += (targetSpeed - physics.speed) * 0.02;
+            physics.speed += (targetSpeed - physics.speed) * 0.05;
 
-            // Uçuş Yüzeyi Torkları (Pitch, Roll, Yaw)
-            const controlResponsiveness = Math.max(0.2, physics.speed / physics.maxSpeed);
-
-            if (keys['w']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, -0.03 * controlResponsiveness, 0.1);
-            else if (keys['s']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0.03 * controlResponsiveness, 0.1);
+            // Direksiyon / Manevra Duyarlılığı
+            if (keys['w']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, -0.02, 0.1);
+            else if (keys['s']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0.02, 0.1);
             else physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0, 0.1);
 
-            if (keys['a']) physics.roll = THREE.MathUtils.lerp(physics.roll, 0.05 * controlResponsiveness, 0.1);
-            else if (keys['d']) physics.roll = THREE.MathUtils.lerp(physics.roll, -0.05 * controlResponsiveness, 0.1);
+            if (keys['a']) physics.roll = THREE.MathUtils.lerp(physics.roll, 0.04, 0.1);
+            else if (keys['d']) physics.roll = THREE.MathUtils.lerp(physics.roll, -0.04, 0.1);
             else physics.roll = THREE.MathUtils.lerp(physics.roll, 0, 0.1);
 
-            if (keys['q']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0.015 * controlResponsiveness, 0.1);
-            else if (keys['e']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, -0.015 * controlResponsiveness, 0.1);
+            if (keys['q']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0.015, 0.1);
+            else if (keys['e']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, -0.015, 0.1);
             else physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0, 0.1);
 
-            // Rotasyon Uygulama
+            // Rotasyonları Uçağa Uygula
             airplane.rotateX(physics.pitch);
             airplane.rotateZ(physics.roll);
             airplane.rotateY(physics.yaw);
 
-            // Yerçekimi ve Taşıma Kuvveti (Lift)
-            const lift = (physics.speed / physics.maxSpeed) * 0.98;
-            const gravity = 0.5;
-            
-            // İleri Hareket
-            airplane.translateZ(physics.speed * 0.1);
-            airplane.position.y += (lift - gravity) * (physics.speed * 0.05);
+            // Uçağı Baktığı Yöne Doğru İlerlet
+            airplane.translateZ(physics.speed * 0.2);
 
-            // Yerle Temas (Yere çakılmayı önleme/Sınır)
-            if (airplane.position.y < 2) {
-                airplane.position.y = 2;
-                if (physics.speed > 100) {
-                    document.getElementById('status-val').innerText = 'ÇAKILDI!';
-                    document.getElementById('status-val').style.color = 'red';
-                }
+            // Yere Temas Kontrolü
+            if (airplane.position.y < 10) {
+                airplane.position.y = 10;
+                document.getElementById('status-val').innerText = 'ZEMİNDE';
+                document.getElementById('status-val').style.color = 'yellow';
             } else {
                 document.getElementById('status-val').innerText = 'UÇUŞTA';
                 document.getElementById('status-val').style.color = '#00ff66';
@@ -237,26 +205,24 @@
             physics.altitude = Math.round(airplane.position.y);
         }
 
-        // --- 8. KAMERA TAKİBİ (Third-Person Smooth Camera) ---
         function updateCamera() {
-            const offset = new THREE.Vector3(0, 8, -35); // Uçağın arkasındaki kamera pozisyonu
+            // Kameranın Uçaktan Uzaklığı (Büyütülen modele göre mesafe artırıldı)
+            const offset = new THREE.Vector3(0, 40, -150);
             offset.applyQuaternion(airplane.quaternion);
             
             const targetCamPos = airplane.position.clone().add(offset);
             camera.position.lerp(targetCamPos, 0.1);
             
-            const lookTarget = airplane.position.clone().add(new THREE.Vector3(0, 2, 20).applyQuaternion(airplane.quaternion));
+            const lookTarget = airplane.position.clone().add(new THREE.Vector3(0, 10, 100).applyQuaternion(airplane.quaternion));
             camera.lookAt(lookTarget);
         }
 
-        // --- 9. HUD EKRANI GÜNCELLEME ---
         function updateHUD() {
             document.getElementById('speed-val').innerText = Math.round(physics.speed);
             document.getElementById('alt-val').innerText = physics.altitude;
             document.getElementById('throttle-val').innerText = Math.round(physics.throttle);
         }
 
-        // --- 10. DÖNGÜ (ANIMATION LOOP) ---
         function animate() {
             requestAnimationFrame(animate);
 
@@ -267,7 +233,6 @@
             renderer.render(scene, camera);
         }
 
-        // Pencere Boyutu Değişimi
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
