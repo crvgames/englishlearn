@@ -1,245 +1,140 @@
- <!DOCTYPE html>
-<html lang="tr">
+ 
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRVGAMES - Uçak Simülatörü</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000;
-            user-select: none;
-        }
-
-        #canvas-container {
-            width: 100vw;
-            height: 100vh;
-        }
-
-        #hud {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #00ff66;
-            font-family: monospace;
-            font-size: 16px;
-            text-shadow: 0 0 5px rgba(0, 255, 102, 0.7);
-            background: rgba(0, 20, 0, 0.6);
-            padding: 15px;
-            border: 1px solid #00ff66;
-            border-radius: 8px;
-            pointer-events: none;
-        }
-
-        #controls-info {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        #crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            border: 2px solid rgba(0, 255, 102, 0.5);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
-
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-    </style>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <meta charset="utf-8">
+  <!-- Created using Storyline 3 - http://www.articulate.com  -->
+  <!-- version: 3.10.22406.0 -->
+  <title> CRVGAMES 8 unit games learning </title>
+  <meta http-equiv="x-ua-compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no, minimal-ui" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=9qEydrPyoj94FMPn9M584CRmjYhW-y0btbZkpdd63dI0-cshvd-92S6Q9L-ST01aRKdyazZWsnl1G0EAljSJ6KQ0bOSXLt1EeZ2S6TnufTUScW9finCjxH1UnVR-75ErW9EElXTBr2DUMKJcVqiLlb2nG4mHgHnGc255XcdR3kw" charset="UTF-8"></script><style>
+    html, body { height: 100%; padding: 0; margin: 0 }
+    #app { height: 100%; width: 100%; }
+  </style>
+  
+  <script>window.THREE = { };</script>
 </head>
-<body>
+<body style="background: #FFFFFF" class="cs-HTML theme-classic">
+  <!-- 360 -->
+  <script>!function(e){function n(e,i){return e.test(i)}function i(e){var i=e||navigator.userAgent,o=i.split("[FBAN");if(void 0!==o[1]&&(i=o[0]),this.apple={phone:n(t,i),ipod:n(d,i),tablet:!n(t,i)&&n(s,i),device:n(t,i)||n(d,i)||n(s,i)},this.amazon={phone:n(h,i),tablet:!n(h,i)&&n(a,i),device:n(h,i)||n(a,i)},this.android={phone:n(h,i)||n(b,i),tablet:!n(h,i)&&!n(b,i)&&(n(a,i)||n(r,i)),device:n(h,i)||n(a,i)||n(b,i)||n(r,i)},this.windows={phone:n(l,i),tablet:n(p,i),device:n(l,i)||n(p,i)},this.other={blackberry:n(f,i),blackberry10:n(u,i),opera:n(c,i),firefox:n(A,i),chrome:n(w,i),device:n(f,i)||n(u,i)||n(c,i)||n(A,i)||n(w,i)},this.seven_inch=n(v,i),this.any=this.apple.device||this.android.device||this.windows.device||this.other.device||this.seven_inch,this.phone=this.apple.phone||this.android.phone||this.windows.phone,this.tablet=this.apple.tablet||this.android.tablet||this.windows.tablet,"undefined"==typeof window)return this}function o(){var e=new i;return e.Class=i,e}var t=/iPhone/i,d=/iPod/i,s=/iPad/i,b=/(?=.*\bAndroid\b)(?=.*\bMobile\b)/i,r=/Android/i,h=/(?=.*\bAndroid\b)(?=.*\bSD4930UR\b)/i,a=/(?=.*\bAndroid\b)(?=.*\b(?:KFOT|KFTT|KFJWI|KFJWA|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|KFARWI|KFASWI|KFSAWI|KFSAWA)\b)/i,l=/IEMobile/i,p=/(?=.*\bWindows\b)(?=.*\bARM\b)/i,f=/BlackBerry/i,u=/BB10/i,c=/Opera Mini/i,w=/(CriOS|Chrome)(?=.*\bMobile\b)/i,A=/(?=.*\bFirefox\b)(?=.*\bMobile\b)/i,v=new RegExp("(?:Nexus 7|BNTV250|Kindle Fire|Silk|GT-P1000)","i");"undefined"!=typeof module&&module.exports&&"undefined"==typeof window?module.exports=i:"undefined"!=typeof module&&module.exports&&"undefined"!=typeof window?module.exports=o():"function"==typeof define&&define.amd?define("isMobile",[],e.isMobile=o()):e.isMobile=o()}(this);
+    window.isMobile.apple.tablet = window.isMobile.apple.tablet ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    window.isMobile.apple.device = window.isMobile.apple.device || window.isMobile.apple.tablet;
+    window.isMobile.tablet = window.isMobile.tablet || window.isMobile.apple.tablet;
+    window.isMobile.any = window.isMobile.any || window.isMobile.apple.tablet;
+  </script>
 
-    <div id="canvas-container"></div>
-    <div id="crosshair"></div>
-    <div id="loading">CRVGAMES Uçak Modeli Yükleniyor...</div>
+  <div id="focus-sink" aria-hidden="true" tabIndex=-1"></div>
 
-    <div id="hud">
-        <b>CRVGAMES FLIGHT HUD</b><br>
-        --------------------<br>
-        HIZ (SPD): <span id="speed-val">0</span> km/h<br>
-        İRTİFA (ALT): <span id="alt-val">0</span> m<br>
-        MOTOR (THROTTLE): %<span id="throttle-val">0</span><br>
-        DURUM: <span id="status-val" style="color:#00ff66;">NORMAL</span>
-    </div>
+  <div id="preso"></div>
+  <script>
+    window.DS = {};
+    window.globals = {
+      DATA_PATH_BASE: '',
+      HAS_FRAME: true,
+      HAS_SLIDE: true,
 
-    <div id="controls-info">
-        <b>KONTROLLER:</b><br>
-        <b>W / S</b> : Burun Aşağı / Yukarı (Pitch)<br>
-        <b>A / D</b> : Sola / Sağa Yatış (Roll)<br>
-        <b>Q / E</b> : Dikey Dümen (Yaw)<br>
-        <b>SHIFT / CTRL</b> : Gaz Arttır / Azalt (Throttle)
-    </div>
+      lmsPresent: false,
+      tinCanPresent: false,
+      cmi5Present: false,
+      aoSupport: false,
+      scale: 'show all',
+      captureRc: false,
+      browserSize: 'optimal',
+      bgColor: '#FFFFFF',
+      features: '',
+      themeName: 'classic',
+      preloaderColor: '#FFFFFF',
+      suppressAnalytics: false,
+      productChannel: 'perpetual',
+      publishSource: 'storyline',
+      aid: '',
+      cid: 'acad7008-2671-43e7-b803-9a3821c0636d',
+      playerVersion: '3.10.22406.0',
+      maxIosVideoElements: 5,
 
-    <script>
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87ceeb);
-        scene.fog = new THREE.FogExp2(0x87ceeb, 0.0002);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-        dirLight.position.set(2000, 4000, 2000);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
-
-        // Zemin ve Izgara
-        const gridHelper = new THREE.GridHelper(50000, 200, 0x004400, 0x228822);
-        gridHelper.position.y = 0;
-        scene.add(gridHelper);
-
-        let airplane = new THREE.Group();
-        scene.add(airplane);
-
-        let physics = {
-            speed: 0,
-            maxSpeed: 800,
-            throttle: 50, // Başlangıçta %50 gaz verelim ki doğrudan hareket etmeye başlasın
-            pitch: 0,
-            roll: 0,
-            yaw: 0,
-            altitude: 0
-        };
-
-        const keys = {};
-
-        window.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
-        window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
-
-        const loader = new THREE.GLTFLoader();
-        loader.load('airplane.gltf', (gltf) => {
-            const model = gltf.scene;
-
-            // MODEL BOYUTUNU BÜYÜTÜYORUZ (İhtiyaca göre 50 rakamını değiştirebilirsiniz)
-            model.scale.set(50, 50, 50);
-
-            // Modellerin yönü farklılık gösterebilir, 180 derece döndürerek öne bakmasını sağlıyoruz
-            model.rotation.y = Math.PI;
-
-            model.traverse((child) => {
-                if (child.isMesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            });
-
-            airplane.add(model);
-            airplane.position.set(0, 500, 0); // Başlangıç yüksekliğini artırdık
-            document.getElementById('loading').style.display = 'none';
-        }, undefined, (error) => {
-            console.error(error);
-            document.getElementById('loading').innerText = 'Model dosyası yüklenemedi!';
-        });
-
-        function updatePhysics() {
-            // Gaz Kontrolü (Shift & Control)
-            if (keys['shift']) physics.throttle = Math.min(100, physics.throttle + 0.5);
-            if (keys['control']) physics.throttle = Math.max(0, physics.throttle - 0.5);
-
-            // Hızlanma Hesabı
-            const targetSpeed = (physics.throttle / 100) * physics.maxSpeed;
-            physics.speed += (targetSpeed - physics.speed) * 0.05;
-
-            // Direksiyon / Manevra Duyarlılığı
-            if (keys['w']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, -0.02, 0.1);
-            else if (keys['s']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0.02, 0.1);
-            else physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0, 0.1);
-
-            if (keys['a']) physics.roll = THREE.MathUtils.lerp(physics.roll, 0.04, 0.1);
-            else if (keys['d']) physics.roll = THREE.MathUtils.lerp(physics.roll, -0.04, 0.1);
-            else physics.roll = THREE.MathUtils.lerp(physics.roll, 0, 0.1);
-
-            if (keys['q']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0.015, 0.1);
-            else if (keys['e']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, -0.015, 0.1);
-            else physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0, 0.1);
-
-            // Rotasyonları Uçağa Uygula
-            airplane.rotateX(physics.pitch);
-            airplane.rotateZ(physics.roll);
-            airplane.rotateY(physics.yaw);
-
-            // Uçağı Baktığı Yöne Doğru İlerlet
-            airplane.translateZ(physics.speed * 0.2);
-
-            // Yere Temas Kontrolü
-            if (airplane.position.y < 10) {
-                airplane.position.y = 10;
-                document.getElementById('status-val').innerText = 'ZEMİNDE';
-                document.getElementById('status-val').style.color = 'yellow';
-            } else {
-                document.getElementById('status-val').innerText = 'UÇUŞTA';
-                document.getElementById('status-val').style.color = '#00ff66';
-            }
-
-            physics.altitude = Math.round(airplane.position.y);
+      
+      parseParams: function(qs) {
+        if (window.globals.parsedParams != null) {
+          return window.globals.parsedParams;
         }
+        qs = (qs || window.location.search.substr(1)).split('+').join(' ');
+        var params = {},
+            tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
 
-        function updateCamera() {
-            // Kameranın Uçaktan Uzaklığı (Büyütülen modele göre mesafe artırıldı)
-            const offset = new THREE.Vector3(0, 40, -150);
-            offset.applyQuaternion(airplane.quaternion);
-            
-            const targetCamPos = airplane.position.clone().add(offset);
-            camera.position.lerp(targetCamPos, 0.1);
-            
-            const lookTarget = airplane.position.clone().add(new THREE.Vector3(0, 10, 100).applyQuaternion(airplane.quaternion));
-            camera.lookAt(lookTarget);
+        while (tokens = re.exec(qs)) {
+          params[decodeURIComponent(tokens[1]).trim()] =
+            decodeURIComponent(tokens[2]).trim();
         }
+        window.globals.parsedParams = params;
+        return params;
+      }
 
-        function updateHUD() {
-            document.getElementById('speed-val').innerText = Math.round(physics.speed);
-            document.getElementById('alt-val').innerText = physics.altitude;
-            document.getElementById('throttle-val').innerText = Math.round(physics.throttle);
+    };
+
+    (function() {
+
+      var classTypes = [ 'desktop', 'mobile', 'phone', 'tablet' ];
+
+      var addDeviceClasses = function(prefix, testObj) {
+        var curr, i;
+        for (i = 0; i < classTypes.length; i++) {
+          curr = classTypes[i];
+          if (testObj[curr]) {
+            document.body.classList.add(prefix + curr);
+          }
         }
+      };
 
-        function animate() {
-            requestAnimationFrame(animate);
+      var params = window.globals.parseParams(),
+          isDevicePreview = params.devicepreview === '1',
+          isPhoneOverride = params.deviceType === 'phone' || (isDevicePreview && params.phone == '1'),
+          isTabletOverride = (params.deviceType === 'tablet' || isDevicePreview) && !isPhoneOverride,
+          isMobileOverride = isPhoneOverride || isTabletOverride;
 
-            updatePhysics();
-            updateCamera();
-            updateHUD();
+      var deviceView = {
+        desktop: !window.isMobile.any && !isMobileOverride,
+        mobile: window.isMobile.any || isMobileOverride,
+        phone: isPhoneOverride || (window.isMobile.phone && !isTabletOverride),
+        tablet: isTabletOverride || window.isMobile.tablet
+      };
 
-            renderer.render(scene, camera);
-        }
+      window.globals.deviceView = deviceView;
+      window.isMobile.desktop = !window.isMobile.any;
+      window.isMobile.mobile = window.isMobile.any;
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+      addDeviceClasses('view-', deviceView);
 
-        animate();
-    </script>
+    })();
+  </script>
+  
+  <script src='story_content/user.js' type=text/javascript></script>
+  <div class="slide-loader"></div>
+
+  <script type="text/javascript">
+    if (window.globals.deviceView.isMobile) { var doc = document, loader = doc.body.querySelector('.slide-loader'); [ 1, 2, 3 ].forEach(function(n) { var d = doc.createElement('div'); d.style.backgroundColor = window.globals.preloaderColor; d.classList.add('mobile-loader-dot'); d.classList.add('dot' + n); loader.appendChild(d); }); }
+  </script>
+
+  <div class="mobile-load-title-overlay" style="display: none">
+    <div class="mobile-load-title">CRVGAMES  uint 8 learning</div>
+  </div>
+
+  <div class="mobile-chrome-warning"></div>
+
+  <script>
+    
+    if (window.autoSpider && window.vInterfaceObject) {
+      document.querySelector('.mobile-load-title-overlay').style.display = 'none';
+    }
+  </script>
+
+  
+
+  <link rel="stylesheet" href="html5/data/css/output.min.css" data-noprefix />
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"6743792b67d048d3a5486b0f9e8a7992","spa":2}' crossorigin="anonymous"></script>
 </body>
+<script src="html5/lib/scripts/ds-bootstrap.min.js"></script>
 </html>
