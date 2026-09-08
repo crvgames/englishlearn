@@ -1,10 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+<link rel="icon" href="favicon0.png" type="image/png">
   <meta charset="utf-8">
-  <title>Shall We?! 8 Key Words - CRVGAMES</title>
+  <title>CRVGAMES - Educational English Games</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <style>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=C8b2UoH4y9QHRBkqR94pKkY_t49mEITEs197Ordd0eJJdQAOHPo8jsI1wFOcyzUZwmZTkg2sCaW4FWEHWV1_GPVU7w96TRkjKW6VPKswNQOD3uQmvc7RDNP51DJe3LGxl3vttO7wPZhhWKLH3oIXnkX_MsOanazwXT4RoCl-IbpHGKkug74pVs-vigRYqtpkaIxkvOrAz_rJQ76BSl355hOH4WtgdcuW61a2GB3YbLyBtjAAuGRcL7apKPEg6kUE9S3GVSTMwuChPNXRpuEpZgFDS6PIDDO1CjIp6WlaW3iQ0cSCyjazc9sqRMkabOMsGbawdRIFkc0YNbgjWvEPoA" charset="UTF-8"></script><style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -12,54 +14,207 @@
       user-select: none;
     }
     body {
-      background: #0f172a;
+       background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url('d.jpeg');
+             background-repeat: no-repeat;
+             background-position: center center;
+             background-attachment: fixed;
+             background-size: cover;
       color: #f8fafc;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 20px 10px;
     }
     header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #38bdf8;
-      margin-bottom: 5px;
-      text-transform: uppercase;
       letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
     }
     p.subtitle {
       color: #94a3b8;
       font-size: 0.95rem;
     }
-    .score-board {
+
+    /* Container Box */
+    .game-card-container {
       background: #1e293b;
-      padding: 10px 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
       border: 1px solid #334155;
-      font-weight: bold;
-      color: #f1f5f9;
-    }
-    .game-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      border-radius: 16px;
+      padding: 24px;
       width: 100%;
       max-width: 650px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
     }
-    .card {
+
+    /* PROFILE SETUP SCREEN */
+    .profile-setup {
+      text-align: center;
+    }
+    .profile-setup h2 {
+      color: #38bdf8;
+      margin-bottom: 15px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .input-group label {
+      display: block;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-group input:focus {
+      border-color: #38bdf8;
+    }
+    .gender-selector {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    .gender-card {
+      background: #0f172a;
+      border: 2px solid #334155;
+      padding: 15px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .gender-card:hover {
+      border-color: #38bdf8;
+    }
+    .gender-card.selected {
+      border-color: #38bdf8;
+      background: #0284c7;
+      color: white;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* USER BAR (PROFILE DISPLAY) */
+    .user-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f172a;
+      padding: 10px 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #334155;
+    }
+    .user-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+    .avatar-badge {
+      font-size: 1.4rem;
       background: #1e293b;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid #38bdf8;
+    }
+
+    /* TIMER DISPLAY */
+    .timer-badge {
+      background: #ef4444;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.03); }
+    }
+
+    /* Navigation Buttons */
+    .game-nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-btn {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .nav-btn:hover {
+      background: #334155;
+      color: #f8fafc;
+    }
+    .nav-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Scoreboard */
+    .score-board {
+      text-align: center;
+      margin-bottom: 15px;
+      font-weight: bold;
+      color: #38bdf8;
+      font-size: 1.1rem;
+    }
+
+    /* GAME 1: Matching */
+    .matching-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .match-card {
+      background: #0f172a;
       border: 2px solid #334155;
       border-radius: 10px;
-      padding: 15px;
+      padding: 15px 10px;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -68,61 +223,284 @@
       align-items: center;
       justify-content: center;
     }
-    .card:hover {
+    .match-card:hover {
       border-color: #38bdf8;
       transform: translateY(-2px);
     }
-    .card.selected {
+    .match-card.selected {
       border-color: #f59e0b;
       background: #334155;
       box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
     }
-    .card.matched {
+    .match-card.matched {
       background: #065f46;
       border-color: #10b981;
       color: #a7f3d0;
       cursor: default;
       transform: none;
     }
-    .win-msg {
-      display: none;
+
+    /* GAME 2 & 3: Quiz & Fill */
+    .quiz-question {
+      font-size: 1.25rem;
+      font-weight: bold;
       text-align: center;
-      margin-top: 20px;
+      margin-bottom: 20px;
+      color: #f1f5f9;
     }
-    .win-msg button {
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option-btn {
+      background: #0f172a;
+      border: 2px solid #334155;
+      color: #e2e8f0;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .option-btn:hover {
+      border-color: #38bdf8;
+      background: #1e293b;
+    }
+
+    .sentence-box {
+      font-size: 1.25rem;
+      text-align: center;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      color: #f1f5f9;
+      background: #0f172a;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px dashed #475569;
+    }
+    .blank-spot {
+      display: inline-block;
+      min-width: 90px;
+      border-bottom: 3px solid #38bdf8;
+      color: #38bdf8;
+      font-weight: bold;
+      padding: 0 8px;
+    }
+
+    /* Win / Game Over Screen */
+    .win-screen {
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .win-screen h2 {
+      color: #38bdf8;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .win-screen p {
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
+
+    .primary-btn {
       background: #0284c7;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 1rem;
-      border-radius: 6px;
+      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
-      margin-top: 10px;
+      transition: background 0.2s ease;
+      width: 100%;
     }
-    .win-msg button:hover {
+    .primary-btn:hover {
       background: #0369a1;
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Shall We?!</h1>
-    <p class="subtitle">Unit 8 - Key Words Matching Game</p>
+    <h1>CRVGAMES</h1>
+    <p class="subtitle">English Unit Games</p>
   </header>
 
-  <div class="score-board">
-    Skor: <span id="score">0</span> / 8
-  </div>
+  <div class="game-card-container">
 
-  <div class="game-container" id="game-board"></div>
+    <!-- SETUP PROFILE SCREEN -->
+    <div id="screen-profile" class="profile-setup">
+      <h2>Oyuncu Profilini Oluştur</h2>
+      
+      <div class="input-group">
+        <label for="player-name">Adın veya Takma Adın:</label>
+        <input type="text" id="player-name" placeholder="İsmini gir..." maxlength="15" autocomplete="off">
+      </div>
 
-  <div class="win-msg" id="win-message">
-    <h2>Tebrikler! Hepsini Eşleştirdin! 🎉</h2>
-    <button onclick="initGame()">Yeniden Oyna</button>
+      <div class="input-group">
+        <label>Karakterini Seç:</label>
+        <div class="gender-selector">
+          <div class="gender-card selected" onclick="selectGender('male', this)">
+            <span>👦 Erkek</span>
+          </div>
+          <div class="gender-card" onclick="selectGender('female', this)">
+            <span>👧 Kız</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="startApp()">Oyuna Başla 🚀</button>
+    </div>
+
+    <!-- MAIN GAME AREA (Hidden initially) -->
+    <div id="screen-main-game" class="hidden">
+
+      <!-- Top User Bar -->
+      <div class="user-bar">
+        <div class="user-profile-info">
+          <div class="avatar-badge" id="display-avatar">👦</div>
+          <span id="display-name">Oyuncu</span>
+        </div>
+        <div class="timer-badge hidden" id="timer-box">
+          ⏱️ <span id="timer-count">10</span>s
+        </div>
+      </div>
+
+      <!-- Game Selector Navigation -->
+      <div class="game-nav">
+        <button class="nav-btn active" onclick="switchGame('matching')">1. Kelime Eşleştirme</button>
+        <button class="nav-btn" onclick="switchGame('quiz')">2. Şıklı Test</button>
+        <button class="nav-btn" onclick="switchGame('fill')">3. Cümle Tamamlama</button>
+      </div>
+
+      <!-- Scoreboard -->
+      <div class="score-board">
+        Skor: <span id="current-score">0</span> / <span id="max-score">8</span>
+      </div>
+
+      <!-- GAME 1: MATCHING -->
+      <div id="game-matching" class="game-module">
+        <div class="matching-grid" id="matching-board"></div>
+      </div>
+
+      <!-- GAME 2: QUIZ -->
+      <div id="game-quiz" class="game-module hidden">
+        <div class="quiz-question" id="quiz-question-text">Soru yükleniyor...</div>
+        <div class="quiz-options" id="quiz-options-container"></div>
+      </div>
+
+      <!-- GAME 3: FILL IN THE BLANKS -->
+      <div id="game-fill" class="game-module hidden">
+        <div class="sentence-box" id="fill-sentence-text">Cümle yükleniyor...</div>
+        <div class="quiz-options" id="fill-options-container"></div>
+      </div>
+
+      <!-- WIN / GAME OVER SCREEN -->
+      <div id="win-screen" class="win-screen hidden">
+        <h2 id="win-title">Tebrikler! 🎉</h2>
+        <p id="win-desc">Oyunu başarıyla tamamladın.</p>
+        <button class="primary-btn" onclick="restartCurrentGame()">Yeniden Oyna 🔄</button>
+      </div>
+
+    </div>
+
   </div>
 
   <script>
+    // =======================================================
+    // AUDIO SYNTHESIS (Web Audio API)
+    // =======================================================
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioCtx();
+      }
+    }
+
+    // Play Tick Sound for Timer
+    function playTickSound() {
+      initAudio();
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    // Play Wrong / Timeout Sound Effect
+    function playWrongSound() {
+      initAudio();
+      if (!audioCtx) return;
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.3);
+    }
+
+    // Play Correct Sound Effect (Fanfare)
+    function playCorrectSound() {
+      initAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+
+      notes.forEach((freq, index) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + index * 0.08);
+
+        gain.gain.setValueAtTime(0.2, now + index * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.25);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now + index * 0.08);
+        osc.stop(now + index * 0.08 + 0.25);
+      });
+    }
+
+    // =======================================================
+    // GAME DATA & PROFILE STATE
+    // =======================================================
+    let playerName = "Oyuncu";
+    let playerGender = "male"; // male | female
+
     const vocabulary = [
       { en: "Accept", tr: "Kabul Etmek" },
       { en: "Refuse", tr: "Reddetmek" },
@@ -134,43 +512,219 @@
       { en: "Event", tr: "Etkinlik" }
     ];
 
+    const quizData = [
+      {
+        question: "'Refuse' kelimesinin Türkçe karşılığı nedir?",
+        options: ["Kabul Etmek", "Reddetmek", "Davet Etmek", "Özür Dilemek"],
+        answer: 1
+      },
+      {
+        question: "'Shall We?!' ne anlama gelir?",
+        options: ["Yapalım mı? / Edeyim mi?", "Neredesin?", "Kaç yaşındasın?", "Saat kaç?"],
+        answer: 0
+      },
+      {
+        question: "Bir partiye insanları çağırmak hangi kelimeyle ifade edilir?",
+        options: ["Apologize", "Refuse", "Invite", "Attend"],
+        answer: 2
+      },
+      {
+        question: "'Etkinlik' kelimesinin İngilizce karşılığı hangisidir?",
+        options: ["Event", "Suggestion", "Offer", "Accept"],
+        answer: 0
+      },
+      {
+        question: "Bir hatadan dolayı 'Özür dilemek' hangisidir?",
+        options: ["Attend", "Apologize", "Offer", "Refuse"],
+        answer: 1
+      }
+    ];
+
+    const fillData = [
+      {
+        sentence: "Would you like to ______ my birthday party this Saturday?",
+        options: ["attend", "refuse", "apologize", "suggestion"],
+        answer: 0
+      },
+      {
+        sentence: "I cannot come because I am busy, so I must ______ your invitation.",
+        options: ["accept", "refuse", "invite", "event"],
+        answer: 1
+      },
+      {
+        sentence: "That sounds awesome! I ______ your offer.",
+        options: ["accept", "apologize", "refuse", "suggestion"],
+        answer: 0
+      },
+      {
+        sentence: "How about going to the cinema? It is a good ______.",
+        options: ["suggestion", "event", "attend", "refuse"],
+        answer: 0
+      },
+      {
+        sentence: "I am really sorry for breaking your chair. I ______.",
+        options: ["invite", "apologize", "accept", "attend"],
+        answer: 1
+      }
+    ];
+
+    // Global Game Control Variables
+    let activeGame = 'matching';
+    let currentScore = 0;
+    let maxScore = 8;
     let selectedEnglish = null;
     let selectedTurkish = null;
-    let score = 0;
+    let currentQuestionIndex = 0;
+
+    // Timer Variables
+    let timerInterval = null;
+    let timeLeft = 10; // 10 seconds per question
+    const QUESTION_TIME_LIMIT = 10;
+
+    // Setup Functions
+    function selectGender(gender, element) {
+      playerGender = gender;
+      document.querySelectorAll('.gender-card').forEach(card => card.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function startApp() {
+      const input = document.getElementById('player-name').value.trim();
+      if (input !== "") {
+        playerName = input;
+      }
+
+      document.getElementById('display-name').innerText = playerName;
+      document.getElementById('display-avatar').innerText = playerGender === 'male' ? '👦' : '👧';
+
+      document.getElementById('screen-profile').classList.add('hidden');
+      document.getElementById('screen-main-game').classList.remove('hidden');
+
+      restartCurrentGame();
+    }
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    function initGame() {
-      score = 0;
-      document.getElementById('score').innerText = score;
-      document.getElementById('win-message').style.display = 'none';
-      
-      const board = document.getElementById('game-board');
-      board.innerHTML = '';
+    // Timer Management
+    function startTimer() {
+      stopTimer();
+      timeLeft = QUESTION_TIME_LIMIT;
+      document.getElementById('timer-box').classList.remove('hidden');
+      document.getElementById('timer-count').innerText = timeLeft;
 
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer-count').innerText = timeLeft;
+        playTickSound();
+
+        if (timeLeft <= 0) {
+          stopTimer();
+          handleTimeout();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('timer-box').classList.add('hidden');
+    }
+
+    function handleTimeout() {
+      playWrongSound();
+      
+      if (activeGame === 'quiz') {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+          renderQuizQuestion();
+        } else {
+          showWinScreen("Süre Bitti! ⏰", `${playerName}, test sona erdi. Skorun: ${currentScore} / ${quizData.length}`);
+        }
+      } else if (activeGame === 'fill') {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < fillData.length) {
+          renderFillQuestion();
+        } else {
+          showWinScreen("Süre Bitti! ⏰", `${playerName}, cümle tamamlama sona erdi. Skorun: ${currentScore} / ${fillData.length}`);
+        }
+      }
+    }
+
+    // Switch active game
+    function switchGame(gameType) {
+      activeGame = gameType;
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      if(gameType === 'matching') document.querySelectorAll('.nav-btn')[0].classList.add('active');
+      if(gameType === 'quiz') document.querySelectorAll('.nav-btn')[1].classList.add('active');
+      if(gameType === 'fill') document.querySelectorAll('.nav-btn')[2].classList.add('active');
+      restartCurrentGame();
+    }
+
+    function restartCurrentGame() {
+      stopTimer();
+      currentScore = 0;
+      currentQuestionIndex = 0;
+      selectedEnglish = null;
+      selectedTurkish = null;
+
+      document.getElementById('win-screen').classList.add('hidden');
+      document.querySelectorAll('.game-module').forEach(el => el.classList.add('hidden'));
+
+      if (activeGame === 'matching') {
+        maxScore = vocabulary.length;
+        document.getElementById('game-matching').classList.remove('hidden');
+        initMatchingGame();
+      } else if (activeGame === 'quiz') {
+        maxScore = quizData.length;
+        document.getElementById('game-quiz').classList.remove('hidden');
+        renderQuizQuestion();
+      } else if (activeGame === 'fill') {
+        maxScore = fillData.length;
+        document.getElementById('game-fill').classList.remove('hidden');
+        renderFillQuestion();
+      }
+
+      updateScoreBoard();
+    }
+
+    function updateScoreBoard() {
+      document.getElementById('current-score').innerText = currentScore;
+      document.getElementById('max-score').innerText = maxScore;
+    }
+
+    function showWinScreen(title, desc) {
+      stopTimer();
+      document.querySelectorAll('.game-module').forEach(el => el.classList.add('hidden'));
+      document.getElementById('win-screen').classList.remove('hidden');
+      document.getElementById('win-title').innerText = title || "Tebrikler! 🎉";
+      document.getElementById('win-desc').innerText = desc || `Harikasın ${playerName}! Oyunu tamamladın.`;
+    }
+
+    // GAME 1: MATCHING (Süresiz, rahat mod)
+    function initMatchingGame() {
+      const board = document.getElementById('matching-board');
+      board.innerHTML = '';
       const englishCards = shuffle([...vocabulary]).map(item => ({ text: item.en, key: item.en, type: 'en' }));
       const turkishCards = shuffle([...vocabulary]).map(item => ({ text: item.tr, key: item.en, type: 'tr' }));
-
-      // İki sütun oluşturmak için kartları harmanlıyoruz
       const allCards = [...englishCards, ...turkishCards];
 
       allCards.forEach(cardData => {
         const cardElem = document.createElement('div');
-        cardElem.classList.add('card');
+        cardElem.classList.add('match-card');
         cardElem.innerText = cardData.text;
         cardElem.dataset.key = cardData.key;
         cardElem.dataset.type = cardData.type;
-
-        cardElem.addEventListener('click', () => handleSelect(cardElem));
+        cardElem.addEventListener('click', () => handleMatchSelect(cardElem));
         board.appendChild(cardElem);
       });
     }
 
-    function handleSelect(card) {
+    function handleMatchSelect(card) {
       if (card.classList.contains('matched')) return;
-
       const type = card.dataset.type;
 
       if (type === 'en') {
@@ -190,22 +744,24 @@
 
     function checkMatch() {
       if (selectedEnglish.dataset.key === selectedTurkish.dataset.key) {
+        playCorrectSound();
         selectedEnglish.classList.remove('selected');
         selectedTurkish.classList.remove('selected');
-        
         selectedEnglish.classList.add('matched');
         selectedTurkish.classList.add('matched');
 
-        score++;
-        document.getElementById('score').innerText = score;
-
+        currentScore++;
+        updateScoreBoard();
         selectedEnglish = null;
         selectedTurkish = null;
 
-        if (score === vocabulary.length) {
-          document.getElementById('win-message').style.display = 'block';
+        if (currentScore === vocabulary.length) {
+          setTimeout(() => {
+            showWinScreen("Bütün Kelimeleri Eşleştirdin! 🏆", `${playerName}, kelime bilgin harika!`);
+          }, 500);
         }
       } else {
+        playWrongSound();
         setTimeout(() => {
           if (selectedEnglish) selectedEnglish.classList.remove('selected');
           if (selectedTurkish) selectedTurkish.classList.remove('selected');
@@ -215,7 +771,83 @@
       }
     }
 
-    initGame();
+    // GAME 2: QUIZ (Süreli)
+    function renderQuizQuestion() {
+      startTimer();
+      const q = quizData[currentQuestionIndex];
+      document.getElementById('quiz-question-text').innerText = `${currentQuestionIndex + 1}. ${q.question}`;
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.classList.add('option-btn');
+        btn.innerText = opt;
+        btn.onclick = () => checkQuizAnswer(idx);
+        container.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selectedIdx) {
+      stopTimer();
+      const q = quizData[currentQuestionIndex];
+      if (selectedIdx === q.answer) {
+        playCorrectSound();
+        currentScore++;
+        updateScoreBoard();
+      } else {
+        playWrongSound();
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizData.length) {
+        renderQuizQuestion();
+      } else {
+        setTimeout(() => {
+          showWinScreen("Test Tamamlandı! 📝", `Tebrikler ${playerName}! Skorun: ${currentScore} / ${quizData.length}`);
+        }, 400);
+      }
+    }
+
+    // GAME 3: FILL IN THE BLANK (Süreli)
+    function renderFillQuestion() {
+      startTimer();
+      const item = fillData[currentQuestionIndex];
+      const sentenceHTML = item.sentence.replace("______", '<span class="blank-spot">?</span>');
+      document.getElementById('fill-sentence-text').innerHTML = `${currentQuestionIndex + 1}. ${sentenceHTML}`;
+
+      const container = document.getElementById('fill-options-container');
+      container.innerHTML = '';
+
+      item.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.classList.add('option-btn');
+        btn.innerText = opt;
+        btn.onclick = () => checkFillAnswer(idx);
+        container.appendChild(btn);
+      });
+    }
+
+    function checkFillAnswer(selectedIdx) {
+      stopTimer();
+      const item = fillData[currentQuestionIndex];
+      if (selectedIdx === item.answer) {
+        playCorrectSound();
+        currentScore++;
+        updateScoreBoard();
+      } else {
+        playWrongSound();
+      }
+
+      currentQuestionIndex++;
+      if (currentQuestionIndex < fillData.length) {
+        renderFillQuestion();
+      } else {
+        setTimeout(() => {
+          showWinScreen("Cümle Tamamlama Bitti! 🎯", `Tebrikler ${playerName}! Skorun: ${currentScore} / ${fillData.length}`);
+        }, 400);
+      }
+    }
   </script>
 </body>
 </html>
