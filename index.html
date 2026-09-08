@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRVGAMES - Uçak Simülatörü</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            user-select: none;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* HUD Gösterge Paneli */
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #00ff66;
+            font-family: monospace;
+            font-size: 16px;
+            text-shadow: 0 0 5px rgba(0, 255, 102, 0.7);
+            background: rgba(0, 20, 0, 0.6);
+            padding: 15px;
+            border: 1px solid #00ff66;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* Kontrol Bilgileri Ekranı */
+        #controls-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            border: 2px solid rgba(0, 255, 102, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+
+    <!-- Three.js ve GLTFLoader CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+    <div id="crosshair"></div>
+    <div id="loading">CRVGAMES Uçak Modeli Yükleniyor...</div>
+
+    <div id="hud">
+        <b>CRVGAMES FLIGHT HUD</b><br>
+        --------------------<br>
+        HIZ (SPD): <span id="speed-val">0</span> km/h<br>
+        İRTİFA (ALT): <span id="alt-val">0</span> m<br>
+        MOTOR (THROTTLE): %<span id="throttle-val">0</span><br>
+        DURUM: <span id="status-val" style="color:#00ff66;">NORMAL</span>
+    </div>
+
+    <div id="controls-info">
+        <b>KONTROLLER:</b><br>
+        <b>W / S</b> : Burun Aşağı / Yukarı (Pitch)<br>
+        <b>A / D</b> : Sola / Sağa Yatış (Roll)<br>
+        <b>Q / E</b> : Dikey Dümen (Yaw)<br>
+        <b>SHIFT / CTRL</b> : Gaz Arttır / Azalt (Throttle)
+    </div>
+
+    <script>
+        // --- 1. SAHNE VE TEMEL KURULUM ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xa0d8ef); // Gökyüzü rengi
+        scene.fog = new THREE.FogExp2(0xa0d8ef, 0.0005);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 50000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        // --- 2. IŞIKLANDIRMA ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(500, 1000, 500);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        // --- 3. ÇEVRE (ÇİM ARAZİ VE BULUTLAR) ---
+        const gridHelper = new THREE.GridHelper(20000, 200, 0x004400, 0x228822);
+        gridHelper.position.y = 0;
+        scene.add(gridHelper);
+
+        // Bulut Oluşturma
+        const clouds = new THREE.Group();
+        const cloudGeo = new THREE.DodecahedronGeometry(80, 1);
+        const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true, transparent: true, opacity: 0.8 });
+
+        for(let i = 0; i < 150; i++) {
+            const cloud = new THREE.Mesh(cloudGeo, cloudMat);
+            cloud.position.set(
+                (Math.random() - 0.5) * 15000,
+                300 + Math.random() * 2000,
+                (Math.random() - 0.5) * 15000
+            );
+            cloud.scale.set(1 + Math.random()*2, 0.8 + Math.random(), 1 + Math.random()*2);
+            clouds.add(cloud);
+        }
+        scene.add(clouds);
+
+        // --- 4. UÇAK FİZİK & KONTROL DEĞİŞKENLERİ ---
+        let airplane = new THREE.Group();
+        scene.add(airplane);
+
+        let physics = {
+            speed: 0,
+            maxSpeed: 300,
+            throttle: 0,
+            pitch: 0,
+            roll: 0,
+            yaw: 0,
+            altitude: 0
+        };
+
+        const keys = { w: false, s: false, a: false, d: false, q: false, e: false, Shift: false, Control: false };
+
+        // --- 5. MODELİN YÜKLENMESİ ---
+        const loader = new THREE.GLTFLoader();
+        // Modelinizi "airplane.gltf" ismiyle kodla aynı dizine koymalısınız
+        loader.load('airplane.gltf', (gltf) => {
+            const model = gltf.scene;
+            
+            // Model ölçeklendirme ve yön düzeltmesi
+            model.scale.set(0.5, 0.5, 0.5); 
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+
+            airplane.add(model);
+            airplane.position.set(0, 100, 0); // Başlangıç yüksekliği
+            document.getElementById('loading').style.display = 'none';
+        }, undefined, (error) => {
+            console.error('Model yüklenirken hata oluştu:', error);
+            document.getElementById('loading').innerText = 'Model dosyası (airplane.gltf) bulunamadı!';
+        });
+
+        // --- 6. KLAVYE KONTROLLERİ ---
+        window.addEventListener('keydown', (e) => { if(keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) keys[e.key] = true; });
+        window.addEventListener('keyup', (e) => { if(keys.hasOwnProperty(e.key) || keys.hasOwnProperty(e.code)) keys[e.key] = false; });
+
+        // --- 7. FİZİK VE HAREKET MOTORU ---
+        function updatePhysics() {
+            // Gaz Kontrolü
+            if (keys['Shift']) physics.throttle = Math.min(100, physics.throttle + 0.5);
+            if (keys['Control']) physics.throttle = Math.max(0, physics.throttle - 0.5);
+
+            // Hedef Hız Hesabı
+            const targetSpeed = (physics.throttle / 100) * physics.maxSpeed;
+            physics.speed += (targetSpeed - physics.speed) * 0.02;
+
+            // Uçuş Yüzeyi Torkları (Pitch, Roll, Yaw)
+            const controlResponsiveness = Math.max(0.2, physics.speed / physics.maxSpeed);
+
+            if (keys['w']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, -0.03 * controlResponsiveness, 0.1);
+            else if (keys['s']) physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0.03 * controlResponsiveness, 0.1);
+            else physics.pitch = THREE.MathUtils.lerp(physics.pitch, 0, 0.1);
+
+            if (keys['a']) physics.roll = THREE.MathUtils.lerp(physics.roll, 0.05 * controlResponsiveness, 0.1);
+            else if (keys['d']) physics.roll = THREE.MathUtils.lerp(physics.roll, -0.05 * controlResponsiveness, 0.1);
+            else physics.roll = THREE.MathUtils.lerp(physics.roll, 0, 0.1);
+
+            if (keys['q']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0.015 * controlResponsiveness, 0.1);
+            else if (keys['e']) physics.yaw = THREE.MathUtils.lerp(physics.yaw, -0.015 * controlResponsiveness, 0.1);
+            else physics.yaw = THREE.MathUtils.lerp(physics.yaw, 0, 0.1);
+
+            // Rotasyon Uygulama
+            airplane.rotateX(physics.pitch);
+            airplane.rotateZ(physics.roll);
+            airplane.rotateY(physics.yaw);
+
+            // Yerçekimi ve Taşıma Kuvveti (Lift)
+            const lift = (physics.speed / physics.maxSpeed) * 0.98;
+            const gravity = 0.5;
+            
+            // İleri Hareket
+            airplane.translateZ(physics.speed * 0.1);
+            airplane.position.y += (lift - gravity) * (physics.speed * 0.05);
+
+            // Yerle Temas (Yere çakılmayı önleme/Sınır)
+            if (airplane.position.y < 2) {
+                airplane.position.y = 2;
+                if (physics.speed > 100) {
+                    document.getElementById('status-val').innerText = 'ÇAKILDI!';
+                    document.getElementById('status-val').style.color = 'red';
+                }
+            } else {
+                document.getElementById('status-val').innerText = 'UÇUŞTA';
+                document.getElementById('status-val').style.color = '#00ff66';
+            }
+
+            physics.altitude = Math.round(airplane.position.y);
+        }
+
+        // --- 8. KAMERA TAKİBİ (Third-Person Smooth Camera) ---
+        function updateCamera() {
+            const offset = new THREE.Vector3(0, 8, -35); // Uçağın arkasındaki kamera pozisyonu
+            offset.applyQuaternion(airplane.quaternion);
+            
+            const targetCamPos = airplane.position.clone().add(offset);
+            camera.position.lerp(targetCamPos, 0.1);
+            
+            const lookTarget = airplane.position.clone().add(new THREE.Vector3(0, 2, 20).applyQuaternion(airplane.quaternion));
+            camera.lookAt(lookTarget);
+        }
+
+        // --- 9. HUD EKRANI GÜNCELLEME ---
+        function updateHUD() {
+            document.getElementById('speed-val').innerText = Math.round(physics.speed);
+            document.getElementById('alt-val').innerText = physics.altitude;
+            document.getElementById('throttle-val').innerText = Math.round(physics.throttle);
+        }
+
+        // --- 10. DÖNGÜ (ANIMATION LOOP) ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            updatePhysics();
+            updateCamera();
+            updateHUD();
+
+            renderer.render(scene, camera);
+        }
+
+        // Pencere Boyutu Değişimi
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
